@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     SomeCompose(
                         itemModel = itemModel,
-                        onTitleClick = {
+                        onClick = { id ->
                             // we want to do something with the id here,
-                            // for example it does not matter what, we simply log it here
-                            Log.d("TEST", "id that we want to perform the action ${itemModel.id}")
+                            // for example does not matter what, we simply log it
+                            Log.d("TEST", "id that we want to perform the action $id")
                         }
                     )
                     Button(
@@ -59,10 +59,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SomeCompose(itemModel: ItemModel, onTitleClick: () -> Unit) {
+fun SomeCompose(itemModel: ItemModel, onClick: (String) -> Unit) {
     Log.d("TEST", "SomeCompose is composed")
+
+    val rememberOnClick = remember {
+        {
+            onClick(itemModel.id)
+        }
+    }
+
     Column {
-        SomeTitleWidget(someTitle = itemModel.title, onTitleClick = onTitleClick)
+        SomeTitleWidget(someTitle = itemModel.title, onTitleClick = rememberOnClick)
         SomeSubtitleWidget(itemModel.subTitle)
     }
 }
