@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     SomeCompose(
                         itemModel = itemModel,
-                        onClick = { id ->
+                        onTitleClick = {
                             // we want to do something with the id here,
-                            // for example does not matter what, we simply log it
-                            Log.d("TEST", "id that we want to perform the action $id")
+                            // for example it does not matter what, we simply log it here
+                            Log.d("TEST", "id that we want to perform the action ${itemModel.id}")
                         }
                     )
                     Button(
@@ -59,17 +59,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SomeCompose(itemModel: ItemModel, onClick: (String) -> Unit) {
+fun SomeCompose(itemModel: ItemModel, onTitleClick: () -> Unit) {
     Log.d("TEST", "SomeCompose is composed")
     Column {
-        //TODO: This wil cause the recomposition, when itemModel changes,
-        // even though title stays the same, because of the lambda creation
-        SomeTitleWidget(someTitle = itemModel.title, onTitleClick = {
-            // we want to propagate an id of the item clicked to a upper composable
-            // we cannot do it inside SomeTitleWidget because it takes someTitle
-            // as a String only, therefore it has not reference to a id
-            onClick(itemModel.id)
-        })
+        SomeTitleWidget(someTitle = itemModel.title, onTitleClick = onTitleClick)
         SomeSubtitleWidget(itemModel.subTitle)
     }
 }
